@@ -51,17 +51,19 @@ with open('output.csv', 'w') as f:
         
 
 
-# # Get unique values
-# unique_list = []
+# Get unique values
+unique_list = []
 
-# # traverse for all elements
-# for x in all_syllables:
-#     # check if exists in unique_list or not
-#     if x not in unique_list:
-#         unique_list.append(x)
+# traverse for all elements
+for x in all_syllables:
+    # check if exists in unique_list or not
+    if np.isnan(x):
+        pass
+    elif x not in unique_list:
+        unique_list.append(int(x))
 
 
-# print(unique_list)
+
 
 # # Now to actually try to make a matrix
 # # need to collect all possible elements
@@ -69,3 +71,20 @@ with open('output.csv', 'w') as f:
 # # Normalize the output
 
 # # need to update an array of arrays at a cross section
+
+print(unique_list)
+
+
+
+d = pd.DataFrame(0, index=np.arange(len(unique_list)), columns=(['start'] + unique_list))
+d = d.assign(start=unique_list)
+
+print(d)
+for key in prob_dict: 
+    first, second  = [int(k) for k in key.split('>')]
+
+    d.loc[d['start'] == first, second] = prob_dict[key] 
+
+
+print(d)
+
