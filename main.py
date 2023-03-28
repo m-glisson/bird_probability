@@ -14,7 +14,6 @@ all_syllables = []
 
 df = pd.read_csv(SOURCE_FILE,  skiprows = 1,header = None)
 
-print(df.to_string()) 
 
 # go throught the file row by row
 for idx in range(0,len(df)-1):
@@ -62,29 +61,27 @@ for x in all_syllables:
     elif x not in unique_list:
         unique_list.append(int(x))
 
-
-
-
 # # Now to actually try to make a matrix
 # # need to collect all possible elements
 # print(unique_list)
 # # Normalize the output
 
 # # need to update an array of arrays at a cross section
-
-print(unique_list)
-
-
-
 d = pd.DataFrame(0, index=np.arange(len(unique_list)), columns=(['start'] + unique_list))
 d = d.assign(start=unique_list)
 
-print(d)
 for key in prob_dict: 
     first, second  = [int(k) for k in key.split('>')]
-
     d.loc[d['start'] == first, second] = prob_dict[key] 
 
+# df.div(df.sum(axis=1), axis=0)
+origin = d.copy(deep=True)
+print(origin)
 
-print(d)
 
+vals = d.iloc[0:, 1:]
+
+normalized = d
+normalized.iloc[0:, 1:] = vals.div(vals.sum(axis=1), axis=0).fillna(0)
+
+print(normalized)
