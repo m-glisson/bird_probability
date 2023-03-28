@@ -3,6 +3,12 @@ import numpy as np
 
 import csv
 
+
+
+import matplotlib.pyplot as plt 
+# Import the MarkovChain class from markovchain.py
+from markovchain import MarkovChain
+
 SOURCE_FILE = 'data_set_sample.csv'
 
 source_data = []
@@ -85,3 +91,7 @@ normalized = d
 normalized.iloc[0:, 1:] = vals.div(vals.sum(axis=1), axis=0).fillna(0)
 
 print(normalized)
+
+P = vals.div(vals.sum(axis=1), axis=0).to_numpy() # Transition matrix
+mc = MarkovChain(P, unique_list)
+mc.draw("markov-chain-states.png")
