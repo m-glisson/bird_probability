@@ -23,7 +23,7 @@ for file_name in file_list:
     # Check if the path is a file (not a directory)
     if os.path.isfile(file_path) and file_name.find('.txt') != -1 :
         sourceFile = open(file_path, "r")
-        parsedFile  = open(f"results/converted_{file_name}", 'w'); 
+        parsedFile  = open(f"results/converted_{file_name}.md", 'w'); 
         for line in sourceFile: 
             parsedData = line 
             # matchString = '(\d+-\d+)'
@@ -37,6 +37,10 @@ for file_name in file_list:
                 seconds = re.search( "\s(\d+(.\d)?)(\s|\n)", parsedData).group(1)   
                 tstart= str(datetime.timedelta(seconds=float(seconds)))
                 parsedData = parsedData.replace(seconds, f"{tstart}")
+            elif bool(re.search( "(\d+/\d+)", parsedData)):
+                parsedData = f"## Date {parsedData}"
+            elif bool(re.search( "Overview", parsedData)) or bool(re.search( "(\d+_\d+_mono\d)", parsedData)):
+                parsedData = f"### {parsedData}"
 
 
             parsedFile.write(parsedData)
