@@ -28,11 +28,10 @@ app.get('/api/data', (req, res) => {
 });
 
 app.get('/api/markov-chain', (req, res) => {
-    // create a json object from the CSV file `../data/all-markov-chain-states.csv` using PapaParse
-    // then send the response to the client
-    const data = fs.readFileSync('../data/all-states-output.csv', 'utf8');
-    const parsedData = Papa.parse(data, {header: true});
-    res.json(parsedData.data);
+    // read the file ../data/miserable.json then return the parsed json object
+    const file = fs.readFileSync('../data/miserable.json', 'utf8');
+    const data = JSON.parse(file);
+    res.json(data);
 });
 
 app.listen(8081);
