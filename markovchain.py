@@ -192,7 +192,7 @@ class MarkovChain:
             ax.annotate(text, xy=(x_prob, y_prob), color='#000000', **self.text_args)
 
 
-    def draw(self, img_path=None):
+    def draw(self, img_path=None, show=True):
         """
         Draw the Markov Chain
         """
@@ -256,4 +256,5 @@ class MarkovChain:
 
         if self.title: 
             plt.title(self.title)
-        plt.show()
+        if show == True: 
+            plt.show()
