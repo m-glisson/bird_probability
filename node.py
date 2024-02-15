@@ -69,7 +69,7 @@ class Node():
             angle = 180
             ring_x = self.x
             ring_y = self.y + self.radius
-            prob_y = self.y + 1.3*self.radius
+            prob_y = self.y + 2 *self.radius
             x_cent = ring_x - self.radius + (self.ring_width/2)
             y_cent = ring_y - 0.15
         else:
@@ -77,7 +77,7 @@ class Node():
             angle = 0
             ring_x = self.x
             ring_y = self.y - self.radius
-            prob_y = self.y - 1.4*self.radius
+            prob_y = self.y - 2.1*self.radius
             x_cent = ring_x + self.radius - (self.ring_width/2)
             y_cent = ring_y + 0.15
 

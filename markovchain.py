@@ -64,7 +64,7 @@ class MarkovChain:
         self.node_edgecolor = self.kwargs.get("node_edgecolor", '#e6e6e6')
 
         # Drawing config
-        self.node_radius = self.kwargs.get("node_radius", 0.60)
+        self.node_radius = self.kwargs.get("node_radius", 1)
         self.arrow_width = self.kwargs.get("arrow_width", 0.1)
         self.arrow_head_width = self.kwargs.get("arrow_head_width", 0.22)
         self.text_args = {
@@ -77,6 +77,10 @@ class MarkovChain:
         self.percentages = self.kwargs.get("percentages", False)
         self.annotate_probabilities = self.kwargs.get("annotate", True)
         self.transparency_func = self.kwargs.get("transparency_func", lambda p: p)
+        self.low_threshold_transparency_func = self.kwargs.get("transparency_func", lambda p: p * 0.5) 
+        self.title = self.kwargs.get('title', False)
+        self.display_threshold = self.kwargs.get('display_threshold', 0)
+        self.window_extension = self.kwargs.get('window_extension', 2)
 
 
     def set_node_centers(self):
@@ -99,8 +103,9 @@ class MarkovChain:
                         (n,2))
 
         self.figsize = (n*2+2, n*2+2)
-        self.xlim = (-n-1, n+1)
-        self.ylim = (-n-1, n+1)
+        window_extension = self.window_extension
+        self.xlim = (-n-window_extension, n+window_extension)
+        self.ylim = (-n-window_extension, n+window_extension)
 
         # Scale by n to have more room
         self.node_centers = unit_circle_coords * n
@@ -139,7 +144,6 @@ class MarkovChain:
         transparency_func:       function to determine transparency of arrows
         width:                   width of arrow body
         """
-
 
         if width is None:
             width = self.arrow_width
@@ -206,23 +210,50 @@ class MarkovChain:
         for i in range(self.M.shape[0]):
             for j in range(self.M.shape[1]):
                 # self loops
-                if i == j and self.M[i,i] > 0:
+                if i == j and self.M[i,i] > self.display_threshold:
                     self.nodes[i].add_self_loop(ax,
                                                 prob = self.M[i,j],
                                                 direction = 'up' if self.nodes[i].y >= 0 else 'down',
                                                 annotate = self.annotate_probabilities,
                                                 percentages = self.percentages)
-
-                # directed arrows
-                elif self.M[i,j] > 0:
+                elif self.M[i,j] > self.display_threshold:
+                    print(self.M[i,j])
                     self.add_arrow(ax,
                                    self.nodes[i],
                                    self.nodes[j],
                                    prob = self.M[i,j],
                                    annotate = self.annotate_probabilities)
+                else:
+                    pass
+                # elif self.M[i,j] == 0: 
+                #     pass
+                    # self.add_arrow(ax,
+                    #                self.nodes[i],
+                    #                self.nodes[j],
+                    #                prob = self.M[i,j],
+                    #                transparency_func= self.low_threshold_transparency_func,
+                    #                annotate = True)
+                # elif self.M[i,j] == 0: 
+                #     self.add_arrow(ax,
+                #                    self.nodes[i],
+                #                    self.nodes[j],
+                #                    prob = self.M[i,j],
+                #                    transparency_func= self.low_threshold_transparency_func,
+                #                    annotate = True)
+                # directed arrows
+
+
 
         plt.axis('off')
         # Save the image to disk?
+        font = {'family' : 'normal',
+        'weight' : 'normal',
+        'size'   : 22}
+        plt.rc('font', **font)
+
         if img_path:
-            plt.savefig(img_path)
+            plt.savefig(img_path, format='png')
+
+        if self.title: 
+            plt.title(self.title)
         plt.show()

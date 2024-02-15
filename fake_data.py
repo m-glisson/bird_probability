@@ -1,4 +1,5 @@
 import random
+import string
 
 LOCATIONS = ['MD', 'PA'] # How many different locations you want to break up to
 NUMBER_BIRDS = 15    # How many birds do you have recorded? 
@@ -19,7 +20,7 @@ def pick_state():
     return random.choice(LOCATIONS)
 
 def sounds_array(number_sounds): 
-    return [str(x) for x in list(range(1, number_sounds))]
+    return [str(x) for x in [string.ascii_uppercase[x] for x in range(0,len(string.ascii_uppercase))]]
 
 def make_song(min_len, max_len, sylls):
     arr_len = random.randint(min_len, max_len)
