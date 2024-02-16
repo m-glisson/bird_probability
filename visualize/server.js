@@ -29,7 +29,7 @@ app.get('/api/data', (req, res) => {
 
 app.get('/api/markov-chain', (req, res) => {
     // read the file ../data/miserable.json then return the parsed json object
-    const file = fs.readFileSync('../data/all-markov-chain-states.json', 'utf8');
+    const file = fs.readFileSync('../mock/mock.json', 'utf8');
     const data = JSON.parse(file);
     res.json(data);
 });
