@@ -93,17 +93,6 @@ for keyword in keywords:
 
 
 
-    # print it to the console
-    # print(prob_dict)
-
-    # Save the results to output.csv as a csv
-    with open(f'data/{keyword}-states-output.csv', 'w') as f:
-        for key in prob_dict.keys():
-            f.write("%s,%s\n"%(key,prob_dict[key]))
-
-            
-
-
     # Get unique values
     unique_list = []
 
@@ -155,3 +144,18 @@ for keyword in keywords:
 
     with open(f'data/{keyword}-markov-chain-states.json', 'w') as f:
         json.dump(json_data, f)
+
+
+
+    # make a normalized dataset to parse through 
+    norm = normalized.set_index('start')
+    
+
+        # Save the results to output.csv as a csv
+    with open(f'data/{keyword}-states-output.csv', 'w') as f:
+        for key in prob_dict.keys():
+            start = key.split('>')[0]
+            end = key.split('>')[1]
+            f.write("%s,%s,%s\n"%(key,prob_dict[key], norm.loc[start, end]))
+
+
