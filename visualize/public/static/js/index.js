@@ -9,6 +9,12 @@ async function drawChart() {
 
   const data = resp.data;
 
+  const ARROWSIZE = 10; 
+  const STRENGTH = -1000; 
+  const RADIUS = 10; 
+  const NODE_COLOR = "#999";
+  const LINK_COLOR = "#999";
+
   const svgWidth = 500;
   const svgHeight = 500;
   const barPadding = 5;
@@ -24,6 +30,7 @@ async function drawChart() {
   // so that re-evaluating this cell produces the same result.
   const links = data.links.map((d) => ({ ...d }));
   const nodes = data.nodes.map((d) => ({ ...d }));
+  const maxLinkValue = Math.max(...links.map((d) => d.value));
 
   // Create a simulation with several forces.
   const simulation = d3
@@ -32,7 +39,7 @@ async function drawChart() {
       "link",
       d3.forceLink(links).id((d) => d.id)
     )
-    .force("charge", d3.forceManyBody())
+    .force("charge", d3.forceManyBody().strength(STRENGTH))
     .force("center", d3.forceCenter(width / 2, height / 2))
     .on("tick", ticked);
 
@@ -51,27 +58,27 @@ async function drawChart() {
     .append("marker")
     .attr("id", "arrowhead")
     .attr("viewBox", "-0 -5 10 10")
-    .attr("refX", 5)
-    .attr("refY", 0)
     .attr("orient", "auto")
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
+    .attr("refX", 20)
+    .attr("refY", 0)
+    .attr("markerWidth", ARROWSIZE)
+    .attr("markerHeight", ARROWSIZE)
     .attr("xoverflow", "visible")
     .append("svg:path")
     .attr("d", "M 0,-5 L 10 ,0 L 0,5")
-    .attr("fill", "#999")
+    .attr("fill", "999")
     .style("stroke", "none");
 
   // Add a line for each link, and a circle for each node.
   const link = svg
     .append("g")
     .attr("id", "arrow")
-    .attr("stroke", "#999")
-    .attr("stroke-opacity", 0.6)
+    .attr("stroke", LINK_COLOR)
     .selectAll()
     .data(links)
     .join("line")
-    .attr("stroke-width", (d) => Math.sqrt(d.value))
+    .attr("stroke-width", (d) => d.value / maxLinkValue *5)
+    .attr("stroke-opacity",(d) => (d.value / maxLinkValue)*5)
     .attr("marker-end", "url(#arrowhead)"); // reference the marker here
 
   const node = svg
@@ -81,8 +88,8 @@ async function drawChart() {
     .selectAll()
     .data(nodes)
     .join("circle")
-    .attr("r", 5);
-  // .attr("fill", d => color(d.group));
+    .attr("r", RADIUS)
+    .attr("fill", NODE_COLOR);
 
   node.append("title").text((d) => d.id);
 
@@ -93,8 +100,8 @@ async function drawChart() {
     .data(nodes)
     .join("text")
     .text((d) => d.id) // replace d.id with the property you want to display
-    .attr("dx", ".10em") // dx and dy are offsets from the circle's center
-    .attr("dy", ".10em");
+    .attr("dx", -1) // dx and dy are offsets from the circle's center
+    .attr("dy", 0);
 
   // Add a drag behavior.
   node.call(

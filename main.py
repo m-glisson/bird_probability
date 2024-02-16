@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+import json
+
 # import csv
 
 
@@ -18,6 +20,30 @@ dat = pd.read_csv(SOURCE_FILE,  skiprows = 1,header = None)
 # Get all states avaliable as keywords
 keywords = list(dat[1].unique())
 keywords.append('all')
+
+
+
+def create_json_links(syllables, transitions_dict):
+
+    {
+    "nodes": [
+        {"id": "Myriel" },
+    ], 
+        "links": [
+        {"source": "Napoleon", "target": "Myriel", "value": 1},
+        ]
+    }
+
+    data = {}
+    data['nodes'] = [{'id': syllable} for syllable in syllables]
+    data['links'] = [{'source': k.split('>')[0], 'target': k.split('>')[1], 'value': transitions_dict[k]} for k in transitions_dict.keys()]
+
+    # write the dict to a json file
+
+
+    return data
+
+
 
 
 for keyword in keywords:
@@ -55,7 +81,7 @@ for keyword in keywords:
         # loop over the "sequence"
         # we are going to look at the index and the next value
         # so the max length is -2 of the entire length of the row
-        for i in range(1,len(data.columns)-1): 
+        for i in range(0,len(data.columns)-1): 
             if isBlank(data.iloc[0,i+1]):
                 pass
             else:
@@ -122,3 +148,10 @@ for keyword in keywords:
                     node_radius = 2.5, 
                     window_extension  = 6)
     mc.draw(f"data/{keyword}-markov-chain-states.png", show=False)
+
+
+
+    json_data = create_json_links(syllables=unique_list, transitions_dict=prob_dict)
+
+    with open(f'data/{keyword}-markov-chain-states.json', 'w') as f:
+        json.dump(json_data, f)
