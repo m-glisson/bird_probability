@@ -34,4 +34,4 @@ app.get('/api/markov-chain', (req, res) => {
     res.json(data);
 });
 
-app.listen(8081);
+app.listen(3000);
