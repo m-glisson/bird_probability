@@ -1,6 +1,10 @@
 env/
+venv/
 *.pyc
 *.cpython
 
+*.zip
 
 data/
+
+node_modules/
