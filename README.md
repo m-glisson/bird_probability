@@ -15,3 +15,14 @@
 ## Sources
 - https://tylermarrs.com/posts/deriving-markov-transition-matrices/
 - https://github.com/NaysanSaran/markov-chain 
+
+
+
+# Usage 
+
+
+1. save the date_medians.py file to a directory on your computer 
+2. in the same directory save requirements.txt
+3. open a terminal and cd to that directory 
+4. run the command `conda create --name data_env --file requirements.txt` 
+5. run the script with `python date_medians.py "./data/Cross Correlation Pre Processiong.xlsx" `  
