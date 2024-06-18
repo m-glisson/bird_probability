@@ -25,7 +25,7 @@ data_set.columns = [x.lower() for x in data_set.columns]
 
 ## Calculate the Median
 # use group by to group the data by date, then run IQR duration
-grouped = data_set.groupby('Date')[['duration (msec)']]
+grouped = data_set.groupby('date')[['duration (msec)']]
 output = grouped.apply(lambda x: x.quantile(0.75) - x.quantile(0.25))
 
 
@@ -56,7 +56,7 @@ for x in range(0, len(data_set)):
 
     # check if the date is in the median set
     # if it is, then we add that in, or ignore it
-    if x < len(median_set): 
+    if x < len(iqr_frame): 
         new_row['iqr_date'] = iqr_frame.iloc[x]['date']
         new_row['iqr_duration'] = iqr_frame.iloc[x]['duration (msec)']
     else: 

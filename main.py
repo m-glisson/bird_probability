@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 # Import the MarkovChain class from markovchain.py
 from markovchain import MarkovChain
 
-SOURCE_FILE = 'data/Syllable Sequences - After Visual Sorting.csv'
-# SOURCE_FILE = 'test.csv'
+SOURCE_FILE = 'data/Final Syllable Sequences - After normalized CC.csv'
+# SOURCE_FILE = 'test.csv' 
 
 dat = pd.read_csv(SOURCE_FILE,  skiprows = 1,header = None)
 
@@ -23,25 +23,25 @@ keywords.append('all')
 
 
 
-def create_json_links(syllables, transitions_dict):
+# def create_json_links(syllables, transitions_dict):
 
-    {
-    "nodes": [
-        {"id": "Myriel" },
-    ], 
-        "links": [
-        {"source": "Napoleon", "target": "Myriel", "value": 1},
-        ]
-    }
+#     {
+#     "nodes": [
+#         {"id": "Myriel" },
+#     ], 
+#         "links": [
+#         {"source": "Napoleon", "target": "Myriel", "value": 1},
+#         ]
+#     }
 
-    data = {}
-    data['nodes'] = [{'id': syllable} for syllable in syllables]
-    data['links'] = [{'source': k.split('>')[0], 'target': k.split('>')[1], 'value': transitions_dict[k]} for k in transitions_dict.keys()]
+#     data = {}
+#     data['nodes'] = [{'id': syllable} for syllable in syllables]
+#     data['links'] = [{'source': k.split('>')[0], 'target': k.split('>')[1], 'value': transitions_dict[k]} for k in transitions_dict.keys()]
 
-    # write the dict to a json file
+#     # write the dict to a json file
 
 
-    return data
+#     return data
 
 
 
@@ -140,10 +140,10 @@ for keyword in keywords:
 
 
 
-    json_data = create_json_links(syllables=unique_list, transitions_dict=prob_dict)
+    # json_data = create_json_links(syllables=unique_list, transitions_dict=prob_dict)
 
-    with open(f'data/{keyword}-markov-chain-states.json', 'w') as f:
-        json.dump(json_data, f)
+    # with open(f'data/{keyword}-markov-chain-states.json', 'w') as f:
+    #     json.dump(json_data, f)
 
 
 
